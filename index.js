@@ -1,11 +1,11 @@
 const http = require('http');
 const fs = require('fs');
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
 	// Base index page
 
 	if (req.url === '/') {
-		const page = fs.readFileSync('./pages/index.html').toString();
+		const page = await fs.readFileSync('./pages/index.html').toString();
 
 		res.setHeader('Content-Type', 'text/html');
 		res.end(page);
@@ -15,9 +15,8 @@ const server = http.createServer((req, res) => {
 	// Static Folder
 
 	if (req.url.startsWith('/public')) {
-		let file;
 		try {
-			file = fs.readFileSync('.' + req.url).toString();
+			await fs.readFileSync('.' + req.url).toString();
 		} catch {
 			res.statusCode = 404;
 			res.end('<h1>404 Not Found</h1>');
@@ -28,12 +27,14 @@ const server = http.createServer((req, res) => {
 			res.setHeader('Content-Type', 'text/css');
 		} else if (req.url.endsWith('.js')) {
 			res.setHeader('Content-Type', 'text/javascript');
+		} else if (req.url.endsWith('.png')) {
+			res.setHeader('Content-Type', 'image/png')
 		} else {
 			res.setHeader('Content-Type', 'text/plain');
 		}
 
 		res.statusCode = 200;
-		res.end(file);
+		fs.createReadStream('.' + req.url).pipe(res);
 		return;
 	}
 
