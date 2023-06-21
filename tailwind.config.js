@@ -1,7 +1,10 @@
 module.exports = {
-	content: ['./public/css/*.css', './pages/*.html', './public/js/*.js'],
+	content: ['./tailwind-css/tailwind-stuff.css', './pages/*.html', './public/js/*.js'],
 	theme: {
 		extend: {},
+		// fontFamily: {
+		// 	'sans': ['Merriweather', 'sans-serif'],
+		// },
 	},
 	plugins: [],
 };
